@@ -23,7 +23,7 @@ This script has to be executed to generate an optimal trajectory based on a give
 # ----------------------------------------------------------------------------------------------------------------------
 
 # choose vehicle parameter file ----------------------------------------------------------------------------------------
-file_paths = {"veh_params_file": "racecar.ini"}
+file_paths = {"veh_params_file": "f110-ctu.ini"}
 
 # debug and plot options -----------------------------------------------------------------------------------------------
 debug = True                                    # print console messages
@@ -32,16 +32,17 @@ plot_opts = {"mincurv_curv_lin": False,         # plot curv. linearization (orig
              "imported_bounds": False,          # plot imported bounds (analyze difference to interpolated bounds)
              "raceline_curv": True,             # plot curvature profile of optimized path
              "racetraj_vel": True,              # plot velocity profile
-             "racetraj_vel_3d": False,          # plot 3D velocity profile above raceline
+             "racetraj_vel_3d": True,          # plot 3D velocity profile above raceline
              "racetraj_vel_3d_stepsize": 1.0,   # [m] vertical lines stepsize in 3D velocity profile plot
-             "spline_normals": False,           # plot spline normals to check for crossings
-             "mintime_plots": False}            # plot states, controls, friction coeffs etc. (mintime only)
+             "spline_normals": True,           # plot spline normals to check for crossings
+             "mintime_plots": True}            # plot states, controls, friction coeffs etc. (mintime only)
 
 # select track file (including centerline coordinates + track widths) --------------------------------------------------
 # file_paths["track_name"] = "rounded_rectangle"                              # artificial track
 # file_paths["track_name"] = "handling_track"                                 # artificial track
-file_paths["track_name"] = "berlin_2018"                                    # Berlin Formula E 2018
+#file_paths["track_name"] = "berlin_2018"                                    # Berlin Formula E 2018
 # file_paths["track_name"] = "modena_2019"                                    # Modena 2019
+file_paths["track_name"] = "torcs_ruudskogen_tenth"
 
 # set import options ---------------------------------------------------------------------------------------------------
 imp_opts = {"flip_imp_track": False,                # flip imported track to reverse direction
@@ -111,7 +112,7 @@ with open(requirements_path, 'r') as fh:
         line = fh.readline()
 
 # check dependencies
-pkg_resources.require(dependencies)
+#pkg_resources.require(dependencies)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # INITIALIZATION OF PATHS ----------------------------------------------------------------------------------------------

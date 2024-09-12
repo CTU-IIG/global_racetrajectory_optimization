@@ -86,18 +86,24 @@ def result_plots_mintime(pars: dict,
     gamma_y = np.append(u[:, 3], u[0, 3])
     
     # tire forces
-    tf_x_fl = tf[:, 0]
-    tf_y_fl = tf[:, 1]
-    tf_z_fl = tf[:, 2]
-    tf_x_fr = tf[:, 3]
-    tf_y_fr = tf[:, 4]
-    tf_z_fr = tf[:, 5] 
-    tf_x_rl = tf[:, 6]
-    tf_y_rl = tf[:, 7]
-    tf_z_rl = tf[:, 8]
-    tf_x_rr = tf[:, 9]
-    tf_y_rr = tf[:, 10]
-    tf_z_rr = tf[:, 11]
+    # tf_x_fl = tf[:, 0]
+    # tf_y_fl = tf[:, 1]
+    # tf_z_fl = tf[:, 2]
+    # tf_x_fr = tf[:, 3]
+    # tf_y_fr = tf[:, 4]
+    # tf_z_fr = tf[:, 5] 
+    # tf_x_rl = tf[:, 6]
+    # tf_y_rl = tf[:, 7]
+    # tf_z_rl = tf[:, 8]
+    # tf_x_rr = tf[:, 9]
+    # tf_y_rr = tf[:, 10]
+    # tf_z_rr = tf[:, 11]
+    tf_x_f = tf[:, 0]
+    tf_y_f = tf[:, 1]
+    tf_z_f = tf[:, 2]
+    tf_x_r = tf[:, 3]
+    tf_y_r = tf[:, 4]
+    tf_z_r = tf[:, 5]
 
     # parameters
     g = pars["veh_params"]["g"]
@@ -126,7 +132,7 @@ def result_plots_mintime(pars: dict,
                     r'$\it{a_y}$' + ' in ' + r'$\it{\frac{m}{s^2}}$',
                     r'$\it{a_{tot}}$' + ' in ' + r'$\it{\frac{m}{s^2}}$',
                     r'$\it{t}$' + ' in ' + r'$\it{s}$'])
-        plt.show()
+        plt.savefig("outputs/velocity_acc_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: SIDE SLIP ANGLE + YAW RATE + RELATIVE ANGLE TO TANGENT ON REFLINE + STEERING ANGLE -------------------------
@@ -156,7 +162,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('steering angle ' + r'$\delta$' + ' in ' + r'$\it{°}$')
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/angle_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: LATERAL DISTANCE TO REFERENCE LINE + ROAD BOUNDARIES -------------------------------------------------------
@@ -176,7 +182,7 @@ def result_plots_mintime(pars: dict,
         plt.ylabel('lateral distance to reference line ' + r'$\it{n}$' + ' in ' + r'$\it{m}$')
         plt.legend(['raceline', 'road boundaries', 'road boundaries - safety margin'], ncol=1, loc=4)
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/lateral_dist_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: KAMM's CIRCLE ----------------------------------------------------------------------------------------------
@@ -192,8 +198,10 @@ def result_plots_mintime(pars: dict,
         fig = plt.gcf()
         ax = fig.gca()
         ax.add_artist(circle1)
-        plt.plot(tf_y_fl / (tf_z_fl * pars["optim_opts"]["mue"]),
-                 tf_x_fl / (tf_z_fl * pars["optim_opts"]["mue"]), '^:')
+        # plt.plot(tf_y_fl / (tf_z_fl * pars["optim_opts"]["mue"]),
+        #          tf_x_fl / (tf_z_fl * pars["optim_opts"]["mue"]), '^:')
+        plt.plot(tf_y_f / (tf_z_f * pars["optim_opts"]["mue"]),
+                 tf_x_f / (tf_z_f * pars["optim_opts"]["mue"]), '^:')
         plt.xlim(-1.2, 1.2)
         plt.ylim(-1.2, 1.2)
         plt.xlabel(r'$\it{\frac{F_{y}}{F_{ymax}}}$')
@@ -206,8 +214,10 @@ def result_plots_mintime(pars: dict,
         fig = plt.gcf()
         ax = fig.gca()
         ax.add_artist(circle1)
-        plt.plot(tf_y_fr / (tf_z_fr * pars["optim_opts"]["mue"]),
-                 tf_x_fr / (tf_z_fr * pars["optim_opts"]["mue"]), '^:')
+        # plt.plot(tf_y_fr / (tf_z_fr * pars["optim_opts"]["mue"]),
+        #          tf_x_fr / (tf_z_fr * pars["optim_opts"]["mue"]), '^:')
+        plt.plot(tf_y_f / (tf_z_f * pars["optim_opts"]["mue"]),
+                 tf_x_f / (tf_z_f * pars["optim_opts"]["mue"]), '^:')
         plt.xlim(-1.2, 1.2)
         plt.ylim(-1.2, 1.2)
         plt.xlabel(r'$\it{\frac{F_{y}}{F_{ymax}}}$')
@@ -220,8 +230,10 @@ def result_plots_mintime(pars: dict,
         fig = plt.gcf()
         ax = fig.gca()
         ax.add_artist(circle1)
-        plt.plot(tf_y_rl / (tf_z_rl * pars["optim_opts"]["mue"]),
-                 tf_x_rl / (tf_z_rl * pars["optim_opts"]["mue"]), '^:')
+        # plt.plot(tf_y_rl / (tf_z_rl * pars["optim_opts"]["mue"]),
+        #          tf_x_rl / (tf_z_rl * pars["optim_opts"]["mue"]), '^:')
+        plt.plot(tf_y_r / (tf_z_r * pars["optim_opts"]["mue"]),
+                 tf_x_r / (tf_z_r * pars["optim_opts"]["mue"]), '^:')
         plt.xlim(-1.2, 1.2)
         plt.ylim(-1.2, 1.2)
         plt.xlabel(r'$\it{\frac{F_{y}}{F_{ymax}}}$')
@@ -234,15 +246,17 @@ def result_plots_mintime(pars: dict,
         fig = plt.gcf()
         ax = fig.gca()
         ax.add_artist(circle1)
-        plt.plot(tf_y_rr / (tf_z_rr * pars["optim_opts"]["mue"]),
-                 tf_x_rr / (tf_z_rr * pars["optim_opts"]["mue"]), '^:')
+        # plt.plot(tf_y_rr / (tf_z_rr * pars["optim_opts"]["mue"]),
+        #          tf_x_rr / (tf_z_rr * pars["optim_opts"]["mue"]), '^:')
+        plt.plot(tf_y_r / (tf_z_r * pars["optim_opts"]["mue"]),
+                 tf_x_r / (tf_z_r * pars["optim_opts"]["mue"]), '^:')
         plt.xlim(-1.2, 1.2)
         plt.ylim(-1.2, 1.2)
         plt.xlabel(r'$\it{\frac{F_{y}}{F_{ymax}}}$')
         plt.ylabel(r'$\it{\frac{F_{x}}{F_{xmax}}}$')
         plt.axis('equal')
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/kamm_circle_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: TIRE FORCES (LONGITUDINAL + LATERAL + NORMAL) --------------------------------------------------------------
@@ -254,41 +268,53 @@ def result_plots_mintime(pars: dict,
         plt.clf()
         plt.suptitle("Tire Forces")
         plt.subplot(221)
-        plt.plot(s, tf_x_fl)
-        plt.plot(s, tf_y_fl)
-        plt.plot(s, tf_z_fl)
+        # plt.plot(s, tf_x_fl)
+        # plt.plot(s, tf_y_fl)
+        # plt.plot(s, tf_z_fl)
+        plt.plot(s, tf_x_f)
+        plt.plot(s, tf_y_f)
+        plt.plot(s, tf_z_f)
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel(r'$\it{F_{i}}$' + ' in ' + r'$\it{N}$')
         plt.legend([r'$\it{F_{x}}$', r'$\it{F_{y}}$', r'$\it{F_{z}}$'], ncol=3, loc=4)
         plt.grid()
 
         plt.subplot(222)
-        plt.plot(s, tf_x_fr)
-        plt.plot(s, tf_y_fr)
-        plt.plot(s, tf_z_fr)
+        # plt.plot(s, tf_x_fr)
+        # plt.plot(s, tf_y_fr)
+        # plt.plot(s, tf_z_fr)
+        plt.plot(s, tf_x_f)
+        plt.plot(s, tf_y_f)
+        plt.plot(s, tf_z_f)
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel(r'$\it{F_{i}}$' + ' in ' + r'$\it{N}$')
         plt.legend([r'$\it{F_{x}}$', r'$\it{F_{y}}$', r'$\it{F_{z}}$'], ncol=3, loc=4)
         plt.grid()
 
         plt.subplot(223)
-        plt.plot(s, tf_x_rl)
-        plt.plot(s, tf_y_rl)
-        plt.plot(s, tf_z_rl)
+        # plt.plot(s, tf_x_rl)
+        # plt.plot(s, tf_y_rl)
+        # plt.plot(s, tf_z_rl)
+        plt.plot(s, tf_x_r)
+        plt.plot(s, tf_y_r)
+        plt.plot(s, tf_z_r)
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel(r'$\it{F_{i}}$' + ' in ' + r'$\it{N}$')
         plt.legend([r'$\it{F_{x}}$', r'$\it{F_{y}}$', r'$\it{F_{z}}$'], ncol=3, loc=4)
         plt.grid()
 
         plt.subplot(224)
-        plt.plot(s, tf_x_rr)
-        plt.plot(s, tf_y_rr)
-        plt.plot(s, tf_z_rr)
+        # plt.plot(s, tf_x_rr)
+        # plt.plot(s, tf_y_rr)
+        # plt.plot(s, tf_z_rr)
+        plt.plot(s, tf_x_r)
+        plt.plot(s, tf_y_r)
+        plt.plot(s, tf_z_r)
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel(r'$\it{F_{i}}$' + ' in ' + r'$\it{N}$')
         plt.legend([r'$\it{F_{x}}$', r'$\it{F_{y}}$', r'$\it{F_{z}}$'], ncol=3, loc=4)
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/tire_forces_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: TIRE FORCES (LONGITUDINAL) ---------------------------------------------------------------------------------
@@ -306,7 +332,7 @@ def result_plots_mintime(pars: dict,
                     r'$\it{F_{drive}}$' + " + " + r'$\it{F_{brake}}$',
                     r'$\it{F_{P_{max}}}$'], ncol=1, loc=4)
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/tire_forces_long_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: DYNAMIC WHEEL LOAD TRANSFER --------------------------------------------------------------------------------
@@ -371,7 +397,7 @@ def result_plots_mintime(pars: dict,
         plt.legend([r'$\it{F_{lift}}$', r'$\it{F_{dyn,long}}$', r'$\it{F_{dyn,lat}}$',
                     r'$\it{F_{lift}}$' + ' + ' + r'$\it{F_{dyn,long}}$' + ' + ' + r'$\it{F_{dyn,lat}}$'], ncol=2, loc=4)
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/load_transfer_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: ENERGY CONSUMPTION -----------------------------------------------------------------------------------------
@@ -385,7 +411,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('energy consumption ' + r'$\it{ec}$' + ' in ' + r'$\it{Wh}$')
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/energy_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWER ------------------------------------------------------------------------------------------------------
@@ -402,7 +428,7 @@ def result_plots_mintime(pars: dict,
         if pwr is not None:
             plt.plot(s[:-1], pwr["batt"].p_loss_total + pwr["batt"].p_out_batt)
             plt.legend([r'$\it{P_{wheel}}$', r'$\it{P_{system}}$'])
-        plt.show()
+        plt.savefig("outputs/power_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWERTRAIN TEMPERATURES ------------------------------------------------------------------------------------
@@ -422,7 +448,7 @@ def result_plots_mintime(pars: dict,
         plt.legend([r'$\it{T_\mathrm{Machine}}$', r'$\it{T_\mathrm{Battery}}$', r'$\it{T_\mathrm{Inverter}}$',
                     r'$\it{T_\mathrm{Fluid_{MI}}}$', r'$\it{T_\mathrm{Fluid_B}}$'])
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/powertrain_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: SOC BATTERY ------------------------------------------------------------------------------------------------
@@ -435,7 +461,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('SOC battery [1 - 0]')
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/battery_plot.png") #show()
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWER LOSSES -----------------------------------------------------------------------------------------------
@@ -476,7 +502,7 @@ def result_plots_mintime(pars: dict,
 
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.grid()
-        plt.show()
+        plt.savefig("outputs/powerloss_plot.png") #show()
 
 # testing --------------------------------------------------------------------------------------------------------------
     if __name__ == "__main__":

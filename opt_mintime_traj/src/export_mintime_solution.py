@@ -63,9 +63,12 @@ def export_mintime_solution(file_path: str,
     np.savetxt(os.path.join(file_path, 'controls.csv'), controls, fmt=fmt_u, header=header_u)
 
     # save tire forces
-    header_tf = "s_m; t_s; f_x_fl_N; f_y_fl_N; f_z_fl_N; f_x_fr_N; f_y_fr_N; f_z_fr_N;" \
-                "f_x_rl_N; f_y_rl_N; f_z_rl_N; f_x_rr_N;f_y_rr_N; f_z_rr_N;"
-    fmt_tf = "%.1f; %.3f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f"
+    # header_tf = "s_m; t_s; f_x_fl_N; f_y_fl_N; f_z_fl_N; f_x_fr_N; f_y_fr_N; f_z_fr_N;" \
+    #             "f_x_rl_N; f_y_rl_N; f_z_rl_N; f_x_rr_N;f_y_rr_N; f_z_rr_N;"
+    # fmt_tf = "%.1f; %.3f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f"
+    header_tf = "s_m; t_s; f_x_f_N; f_y_f_N; f_z_f_N;" \
+                "f_x_r_N; f_y_r_N; f_z_r_N;"
+    fmt_tf = "%.1f; %.3f; %.1f; %.1f; %.1f; %.1f; %.1f; %.1f"
     tire_forces = np.column_stack((s, t, tf))
     np.savetxt(os.path.join(file_path, 'tire_forces.csv'), tire_forces, fmt=fmt_tf, header=header_tf)
 

@@ -138,3 +138,5 @@ dmypy.json
 
 # repo specific
 outputs
+
+*swp

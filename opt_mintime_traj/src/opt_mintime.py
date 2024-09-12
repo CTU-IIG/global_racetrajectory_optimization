@@ -296,76 +296,103 @@ def opt_mintime(reftrack: np.ndarray,
     f_xdrag = pars["veh_params"]["dragcoeff"] * v ** 2
 
     # rolling resistance forces [N]
-    f_xroll_fl = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
-    f_xroll_fr = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
-    f_xroll_rl = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
-    f_xroll_rr = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    # f_xroll_fl = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    # f_xroll_fr = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    f_xroll_f = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    # f_xroll_rl = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    # f_xroll_rr = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    f_xroll_r = 0.5 * tire["c_roll"] * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
     f_xroll = tire["c_roll"] * mass * g
 
     # static normal tire forces [N]
-    f_zstat_fl = 0.5 * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
-    f_zstat_fr = 0.5 * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
-    f_zstat_rl = 0.5 * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
-    f_zstat_rr = 0.5 * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    # f_zstat_fl = 0.5 * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    # f_zstat_fr = 0.5 * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    f_zstat_f = 0.5 * mass * g * veh["wheelbase_rear"] / veh["wheelbase"]
+    # f_zstat_rl = 0.5 * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    # f_zstat_rr = 0.5 * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
+    f_zstat_r = 0.5 * mass * g * veh["wheelbase_front"] / veh["wheelbase"]
 
     # dynamic normal tire forces (aerodynamic downforces) [N]
-    f_zlift_fl = 0.5 * veh["liftcoeff_front"] * v ** 2
-    f_zlift_fr = 0.5 * veh["liftcoeff_front"] * v ** 2
-    f_zlift_rl = 0.5 * veh["liftcoeff_rear"] * v ** 2
-    f_zlift_rr = 0.5 * veh["liftcoeff_rear"] * v ** 2
+    # f_zlift_fl = 0.5 * veh["liftcoeff_front"] * v ** 2
+    # f_zlift_fr = 0.5 * veh["liftcoeff_front"] * v ** 2
+    f_zlift_f = 0.5 * veh["liftcoeff_front"] * v ** 2
+    # f_zlift_rl = 0.5 * veh["liftcoeff_rear"] * v ** 2
+    # f_zlift_rr = 0.5 * veh["liftcoeff_rear"] * v ** 2
+    f_zlift_r = 0.5 * veh["liftcoeff_rear"] * v ** 2
 
     # dynamic normal tire forces (load transfers) [N]
-    f_zdyn_fl = (-0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
-                 - veh["k_roll"] * gamma_y)
-    f_zdyn_fr = (-0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    # f_zdyn_fl = (-0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    #             - veh["k_roll"] * gamma_y)
+    # f_zdyn_fr = (-0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    #             + veh["k_roll"] * gamma_y)
+    f_zdyn_f = (-0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
                  + veh["k_roll"] * gamma_y)
-    f_zdyn_rl = (0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
-                 - (1.0 - veh["k_roll"]) * gamma_y)
-    f_zdyn_rr = (0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    # f_zdyn_rl = (0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    #             - (1.0 - veh["k_roll"]) * gamma_y)
+    # f_zdyn_rr = (0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
+    #             + (1.0 - veh["k_roll"]) * gamma_y)
+    f_zdyn_r = (0.5 * veh["cog_z"] / veh["wheelbase"] * (f_drive + f_brake - f_xdrag - f_xroll)
                  + (1.0 - veh["k_roll"]) * gamma_y)
 
     # sum of all normal tire forces [N]
-    f_z_fl = f_zstat_fl + f_zlift_fl + f_zdyn_fl
-    f_z_fr = f_zstat_fr + f_zlift_fr + f_zdyn_fr
-    f_z_rl = f_zstat_rl + f_zlift_rl + f_zdyn_rl
-    f_z_rr = f_zstat_rr + f_zlift_rr + f_zdyn_rr
+    # f_z_fl = f_zstat_fl + f_zlift_fl + f_zdyn_fl
+    # f_z_fr = f_zstat_fr + f_zlift_fr + f_zdyn_fr
+    f_z_f = f_zstat_f + f_zlift_f + f_zdyn_f
+    # f_z_rl = f_zstat_rl + f_zlift_rl + f_zdyn_rl
+    # f_z_rr = f_zstat_rr + f_zlift_rr + f_zdyn_rr
+    f_z_r = f_zstat_r + f_zlift_r + f_zdyn_r
 
     # slip angles [rad]
-    alpha_fl = delta - ca.atan((v * ca.sin(beta) + veh["wheelbase_front"] * omega_z) /
-                               (v * ca.cos(beta) - 0.5 * veh["track_width_front"] * omega_z))
-    alpha_fr = delta - ca.atan((v * ca.sin(beta) + veh["wheelbase_front"] * omega_z) /
-                               (v * ca.cos(beta) + 0.5 * veh["track_width_front"] * omega_z))
-    alpha_rl = ca.atan((-v * ca.sin(beta) + veh["wheelbase_rear"] * omega_z) /
-                       (v * ca.cos(beta) - 0.5 * veh["track_width_rear"] * omega_z))
-    alpha_rr = ca.atan((-v * ca.sin(beta) + veh["wheelbase_rear"] * omega_z) /
-                       (v * ca.cos(beta) + 0.5 * veh["track_width_rear"] * omega_z))
+    # alpha_fl = delta - ca.atan((v * ca.sin(beta) + veh["wheelbase_front"] * omega_z) /
+    #                            (v * ca.cos(beta) - 0.5 * veh["track_width_front"] * omega_z))
+    # alpha_fr = delta - ca.atan((v * ca.sin(beta) + veh["wheelbase_front"] * omega_z) /
+    #                            (v * ca.cos(beta) + 0.5 * veh["track_width_front"] * omega_z))
+    alpha_f = delta - ca.atan((v * ca.sin(beta) + veh["wheelbase_front"] * omega_z) /
+                               (v * ca.cos(beta) + 0. * veh["track_width_front"] * omega_z))
+    # alpha_rl = ca.atan((-v * ca.sin(beta) + veh["wheelbase_rear"] * omega_z) /
+    #                    (v * ca.cos(beta) - 0.5 * veh["track_width_rear"] * omega_z))
+    # alpha_rr = ca.atan((-v * ca.sin(beta) + veh["wheelbase_rear"] * omega_z) /
+    #                    (v * ca.cos(beta) + 0.5 * veh["track_width_rear"] * omega_z))
+    alpha_r = ca.atan((-v * ca.sin(beta) + veh["wheelbase_rear"] * omega_z) /
+                       (v * ca.cos(beta) + 0. * veh["track_width_rear"] * omega_z))
 
     # lateral tire forces [N]
-    f_y_fl = (pars["optim_opts"]["mue"] * f_z_fl * (1 + tire["eps_front"] * f_z_fl / tire["f_z0"])
-              * ca.sin(tire["C_front"] * ca.atan(tire["B_front"] * alpha_fl - tire["E_front"]
-                                                 * (tire["B_front"] * alpha_fl - ca.atan(tire["B_front"] * alpha_fl)))))
-    f_y_fr = (pars["optim_opts"]["mue"] * f_z_fr * (1 + tire["eps_front"] * f_z_fr / tire["f_z0"])
-              * ca.sin(tire["C_front"] * ca.atan(tire["B_front"] * alpha_fr - tire["E_front"]
-                                                 * (tire["B_front"] * alpha_fr - ca.atan(tire["B_front"] * alpha_fr)))))
-    f_y_rl = (pars["optim_opts"]["mue"] * f_z_rl * (1 + tire["eps_rear"] * f_z_rl / tire["f_z0"])
-              * ca.sin(tire["C_rear"] * ca.atan(tire["B_rear"] * alpha_rl - tire["E_rear"]
-                                                * (tire["B_rear"] * alpha_rl - ca.atan(tire["B_rear"] * alpha_rl)))))
-    f_y_rr = (pars["optim_opts"]["mue"] * f_z_rr * (1 + tire["eps_rear"] * f_z_rr / tire["f_z0"])
-              * ca.sin(tire["C_rear"] * ca.atan(tire["B_rear"] * alpha_rr - tire["E_rear"]
-                                                * (tire["B_rear"] * alpha_rr - ca.atan(tire["B_rear"] * alpha_rr)))))
+    # f_y_fl = (pars["optim_opts"]["mue"] * f_z_fl * (1 + tire["eps_front"] * f_z_fl / tire["f_z0"])
+    #           * ca.sin(tire["C_front"] * ca.atan(tire["B_front"] * alpha_fl - tire["E_front"]
+    #                                              * (tire["B_front"] * alpha_fl - ca.atan(tire["B_front"] * alpha_fl)))))
+    # f_y_fr = (pars["optim_opts"]["mue"] * f_z_fr * (1 + tire["eps_front"] * f_z_fr / tire["f_z0"])
+    #           * ca.sin(tire["C_front"] * ca.atan(tire["B_front"] * alpha_fr - tire["E_front"]
+    #                                              * (tire["B_front"] * alpha_fr - ca.atan(tire["B_front"] * alpha_fr)))))
+    f_y_f = (pars["optim_opts"]["mue"] * f_z_f * (1 + tire["eps_front"] * f_z_f / tire["f_z0"])
+              * ca.sin(tire["C_front"] * ca.atan(tire["B_front"] * alpha_f - tire["E_front"]
+                                                 * (tire["B_front"] * alpha_f - ca.atan(tire["B_front"] * alpha_f)))))
+    # f_y_rl = (pars["optim_opts"]["mue"] * f_z_rl * (1 + tire["eps_rear"] * f_z_rl / tire["f_z0"])
+    #           * ca.sin(tire["C_rear"] * ca.atan(tire["B_rear"] * alpha_rl - tire["E_rear"]
+    #                                             * (tire["B_rear"] * alpha_rl - ca.atan(tire["B_rear"] * alpha_rl)))))
+    # f_y_rr = (pars["optim_opts"]["mue"] * f_z_rr * (1 + tire["eps_rear"] * f_z_rr / tire["f_z0"])
+    #           * ca.sin(tire["C_rear"] * ca.atan(tire["B_rear"] * alpha_rr - tire["E_rear"]
+    #                                             * (tire["B_rear"] * alpha_rr - ca.atan(tire["B_rear"] * alpha_rr)))))
+    f_y_r = (pars["optim_opts"]["mue"] * f_z_r * (1 + tire["eps_rear"] * f_z_r / tire["f_z0"])
+              * ca.sin(tire["C_rear"] * ca.atan(tire["B_rear"] * alpha_r - tire["E_rear"]
+                                                * (tire["B_rear"] * alpha_r - ca.atan(tire["B_rear"] * alpha_r)))))
 
     # longitudinal tire forces [N]
-    f_x_fl = 0.5 * f_drive * veh["k_drive_front"] + 0.5 * f_brake * veh["k_brake_front"] - f_xroll_fl
-    f_x_fr = 0.5 * f_drive * veh["k_drive_front"] + 0.5 * f_brake * veh["k_brake_front"] - f_xroll_fr
-    f_x_rl = 0.5 * f_drive * (1 - veh["k_drive_front"]) + 0.5 * f_brake * (1 - veh["k_brake_front"]) - f_xroll_rl
-    f_x_rr = 0.5 * f_drive * (1 - veh["k_drive_front"]) + 0.5 * f_brake * (1 - veh["k_brake_front"]) - f_xroll_rr
+    # f_x_fl = 0.5 * f_drive * veh["k_drive_front"] + 0.5 * f_brake * veh["k_brake_front"] - f_xroll_fl
+    # f_x_fr = 0.5 * f_drive * veh["k_drive_front"] + 0.5 * f_brake * veh["k_brake_front"] - f_xroll_fr
+    f_x_f = 0.5 * f_drive * veh["k_drive_front"] + 0.5 * f_brake * veh["k_brake_front"] - f_xroll_f
+    # f_x_rl = 0.5 * f_drive * (1 - veh["k_drive_front"]) + 0.5 * f_brake * (1 - veh["k_brake_front"]) - f_xroll_rl
+    # f_x_rr = 0.5 * f_drive * (1 - veh["k_drive_front"]) + 0.5 * f_brake * (1 - veh["k_brake_front"]) - f_xroll_rr
+    f_x_r = 0.5 * f_drive * (1 - veh["k_drive_front"]) + 0.5 * f_brake * (1 - veh["k_brake_front"]) - f_xroll_r
 
     # longitudinal acceleration [m/s²]
-    ax = (f_x_rl + f_x_rr + (f_x_fl + f_x_fr) * ca.cos(delta) - (f_y_fl + f_y_fr) * ca.sin(delta)
+    # ax = (f_x_rl + f_x_rr + (f_x_fl + f_x_fr) * ca.cos(delta) - (f_y_fl + f_y_fr) * ca.sin(delta)
+    #       - pars["veh_params"]["dragcoeff"] * v ** 2) / mass
+    ax = (f_x_r + (f_x_f) * ca.cos(delta) - (f_y_f) * ca.sin(delta)
           - pars["veh_params"]["dragcoeff"] * v ** 2) / mass
 
     # lateral acceleration [m/s²]
-    ay = ((f_x_fl + f_x_fr) * ca.sin(delta) + f_y_rl + f_y_rr + (f_y_fl + f_y_fr) * ca.cos(delta)) / mass
+    # ay = ((f_x_fl + f_x_fr) * ca.sin(delta) + f_y_rl + f_y_rr + (f_y_fl + f_y_fr) * ca.cos(delta)) / mass
+    ay = ((f_x_f) * ca.sin(delta) + f_y_r + (f_y_f) * ca.cos(delta)) / mass
 
     # ------------------------------------------------------------------------------------------------------------------
     # POWERTRAIN BEHAVIOR ----------------------------------------------------------------------------------------------
@@ -421,20 +448,32 @@ def opt_mintime(reftrack: np.ndarray,
     sf = (1.0 - n * kappa) / (v * (ca.cos(xi + beta)))
 
     # model equations for two track model (ordinary differential equations)
-    dv = (sf / mass) * ((f_x_rl + f_x_rr) * ca.cos(beta) + (f_x_fl + f_x_fr) * ca.cos(delta - beta)
-                        + (f_y_rl + f_y_rr) * ca.sin(beta) - (f_y_fl + f_y_fr) * ca.sin(delta - beta)
+    # dv = (sf / mass) * ((f_x_rl + f_x_rr) * ca.cos(beta) + (f_x_fl + f_x_fr) * ca.cos(delta - beta)
+    #                     + (f_y_rl + f_y_rr) * ca.sin(beta) - (f_y_fl + f_y_fr) * ca.sin(delta - beta)
+    #                     - f_xdrag * ca.cos(beta))
+    dv = (sf / mass) * ((f_x_r) * ca.cos(beta) + (f_x_f) * ca.cos(delta - beta)
+                        + (f_y_r) * ca.sin(beta) - (f_y_f) * ca.sin(delta - beta)
                         - f_xdrag * ca.cos(beta))
 
-    dbeta = sf * (-omega_z + (-(f_x_rl + f_x_rr) * ca.sin(beta) + (f_x_fl + f_x_fr) * ca.sin(delta - beta)
-                              + (f_y_rl + f_y_rr) * ca.cos(beta) + (f_y_fl + f_y_fr) * ca.cos(delta - beta)
-                              + f_xdrag * ca.sin(beta)) / (mass * v))
+    # dbeta = sf * (-omega_z + (-(f_x_rl + f_x_rr) * ca.sin(beta) + (f_x_fl + f_x_fr) * ca.sin(delta - beta)
+    #                           + (f_y_rl + f_y_rr) * ca.cos(beta) + (f_y_fl + f_y_fr) * ca.cos(delta - beta)
+    #                           + f_xdrag * ca.sin(beta)) / (mass * v))
+    dbeta = 0.0#sf * (-omega_z + (-(f_x_r) * ca.sin(beta) + (f_x_f) * ca.sin(delta - beta)
+            #                  + (f_y_r) * ca.cos(beta) + (f_y_f) * ca.cos(delta - beta)
+            #                  + f_xdrag * ca.sin(beta)) / (mass * v))
 
-    domega_z = (sf / veh["I_z"]) * ((f_x_rr - f_x_rl) * veh["track_width_rear"] / 2
-                                    - (f_y_rl + f_y_rr) * veh["wheelbase_rear"]
-                                    + ((f_x_fr - f_x_fl) * ca.cos(delta)
-                                       + (f_y_fl - f_y_fr) * ca.sin(delta)) * veh["track_width_front"] / 2
-                                    + ((f_y_fl + f_y_fr) * ca.cos(delta)
-                                       + (f_x_fl + f_x_fr) * ca.sin(delta)) * veh["track_width_front"])
+    # domega_z = (sf / veh["I_z"]) * ((f_x_rr - f_x_rl) * veh["track_width_rear"] / 2
+    #                                 - (f_y_rl + f_y_rr) * veh["wheelbase_rear"]
+    #                                 + ((f_x_fr - f_x_fl) * ca.cos(delta)
+    #                                    + (f_y_fl - f_y_fr) * ca.sin(delta)) * veh["track_width_front"] / 2
+    #                                 + ((f_y_fl + f_y_fr) * ca.cos(delta)
+    #                                    + (f_x_fl + f_x_fr) * ca.sin(delta)) * veh["track_width_front"])
+    domega_z = (sf / veh["I_z"]) * ((f_x_r) * veh["track_width_rear"] / 2
+                                    - (f_y_r) * veh["wheelbase_rear"]
+                                    + ((f_x_f) * ca.cos(delta)
+                                       + (f_y_f) * ca.sin(delta)) * veh["track_width_front"] / 2
+                                    + ((f_y_f) * ca.cos(delta)
+                                       + (f_x_f) * ca.sin(delta)) * veh["track_width_front"])
 
     dn = sf * v * ca.sin(xi + beta)
 
@@ -479,7 +518,7 @@ def opt_mintime(reftrack: np.ndarray,
     # CONTROL BOUNDARIES -----------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
 
-    delta_min = -veh["delta_max"] / delta_s         # min. steer angle [rad]
+    delta_min = -veh["delta_max"] / delta_s         # min. steer angle [rad] # FIXME: Tohle je divny. Proc / 0.5? # Tohle "vrati" skalovani, ktere je tam predtim udelane
     delta_max = veh["delta_max"] / delta_s          # max. steer angle [rad]
     f_drive_min = 0.0                               # min. longitudinal drive force [N]
     f_drive_max = veh["f_drive_max"] / f_drive_s    # max. longitudinal drive force [N]
@@ -514,14 +553,20 @@ def opt_mintime(reftrack: np.ndarray,
     f_dyn = ca.Function('f_dyn', [x, u, kappa], [dx, sf], ['x', 'u', 'kappa'], ['dx', 'sf'])
 
     # longitudinal tire forces [N]
-    f_fx = ca.Function('f_fx', [x, u], [f_x_fl, f_x_fr, f_x_rl, f_x_rr],
-                       ['x', 'u'], ['f_x_fl', 'f_x_fr', 'f_x_rl', 'f_x_rr'])
+    # f_fx = ca.Function('f_fx', [x, u], [f_x_fl, f_x_fr, f_x_rl, f_x_rr],
+    #                    ['x', 'u'], ['f_x_fl', 'f_x_fr', 'f_x_rl', 'f_x_rr'])
+    f_fx = ca.Function('f_fx', [x, u], [f_x_f, f_x_r],
+                       ['x', 'u'], ['f_x_f', 'f_x_r'])
     # lateral tire forces [N]
-    f_fy = ca.Function('f_fy', [x, u], [f_y_fl, f_y_fr, f_y_rl, f_y_rr],
-                       ['x', 'u'], ['f_y_fl', 'f_y_fr', 'f_y_rl', 'f_y_rr'])
+    # f_fy = ca.Function('f_fy', [x, u], [f_y_fl, f_y_fr, f_y_rl, f_y_rr],
+    #                    ['x', 'u'], ['f_y_fl', 'f_y_fr', 'f_y_rl', 'f_y_rr'])
+    f_fy = ca.Function('f_fy', [x, u], [f_y_f, f_y_r],
+                       ['x', 'u'], ['f_y_f', 'f_y_r'])
     # vertical tire forces [N]
-    f_fz = ca.Function('f_fz', [x, u], [f_z_fl, f_z_fr, f_z_rl, f_z_rr],
-                       ['x', 'u'], ['f_z_fl', 'f_z_fr', 'f_z_rl', 'f_z_rr'])
+    # f_fz = ca.Function('f_fz', [x, u], [f_z_fl, f_z_fr, f_z_rl, f_z_rr],
+    #                    ['x', 'u'], ['f_z_fl', 'f_z_fr', 'f_z_rl', 'f_z_rr'])
+    f_fz = ca.Function('f_fz', [x, u], [f_z_f, f_z_r],
+                       ['x', 'u'], ['f_z_f', 'f_z_r'])
 
     # longitudinal and lateral acceleration [m/s²]
     f_a = ca.Function('f_a', [x, u], [ax, ay], ['x', 'u'], ['ax', 'ay'])
@@ -702,9 +747,12 @@ def opt_mintime(reftrack: np.ndarray,
         ubg.append([0.0] * nx)
 
         # get tire forces
-        f_x_flk, f_x_frk, f_x_rlk, f_x_rrk = f_fx(Xk, Uk)
-        f_y_flk, f_y_frk, f_y_rlk, f_y_rrk = f_fy(Xk, Uk)
-        f_z_flk, f_z_frk, f_z_rlk, f_z_rrk = f_fz(Xk, Uk)
+        # f_x_flk, f_x_frk, f_x_rlk, f_x_rrk = f_fx(Xk, Uk)
+        f_x_fk, f_x_rk = f_fx(Xk, Uk)
+        # f_y_flk, f_y_frk, f_y_rlk, f_y_rrk = f_fy(Xk, Uk)
+        f_y_fk, f_y_rk = f_fy(Xk, Uk)
+        # f_z_flk, f_z_frk, f_z_rlk, f_z_rrk = f_fz(Xk, Uk)
+        f_z_fk, f_z_rk = f_fz(Xk, Uk)
 
         # get accelerations (longitudinal + lateral)
         axk, ayk = f_a(Xk, Uk)
@@ -750,16 +798,23 @@ def opt_mintime(reftrack: np.ndarray,
             raise ValueError("No friction coefficients are available!")
 
         # path constraint: Kamm's Circle for each wheel
-        g.append(((f_x_flk / (mue_fl * f_z_flk)) ** 2 + (f_y_flk / (mue_fl * f_z_flk)) ** 2))
-        g.append(((f_x_frk / (mue_fr * f_z_frk)) ** 2 + (f_y_frk / (mue_fr * f_z_frk)) ** 2))
-        g.append(((f_x_rlk / (mue_rl * f_z_rlk)) ** 2 + (f_y_rlk / (mue_rl * f_z_rlk)) ** 2))
-        g.append(((f_x_rrk / (mue_rr * f_z_rrk)) ** 2 + (f_y_rrk / (mue_rr * f_z_rrk)) ** 2))
-        lbg.append([0.0] * 4)
-        ubg.append([1.0] * 4)
+        # g.append(((f_x_flk / (mue_fl * f_z_flk)) ** 2 + (f_y_flk / (mue_fl * f_z_flk)) ** 2))
+        # g.append(((f_x_frk / (mue_fr * f_z_frk)) ** 2 + (f_y_frk / (mue_fr * f_z_frk)) ** 2))
+        g.append(((f_x_fk / (mue_fr * f_z_fk)) ** 2 + (f_y_fk / (mue_fr * f_z_fk)) ** 2))
+        # g.append(((f_x_rlk / (mue_rl * f_z_rlk)) ** 2 + (f_y_rlk / (mue_rl * f_z_rlk)) ** 2))
+        # g.append(((f_x_rrk / (mue_rr * f_z_rrk)) ** 2 + (f_y_rrk / (mue_rr * f_z_rrk)) ** 2))
+        g.append(((f_x_rk / (mue_rr * f_z_rk)) ** 2 + (f_y_rk / (mue_rr * f_z_rk)) ** 2))
+        # lbg.append([0.0] * 4)
+        lbg.append([0.0] * 2)
+        # ubg.append([1.0] * 4)
+        ubg.append([1.0] * 2)
 
         # path constraint: lateral wheel load transfer
-        g.append(((f_y_flk + f_y_frk) * ca.cos(Uk[0] * delta_s) + f_y_rlk + f_y_rrk
-                  + (f_x_flk + f_x_frk) * ca.sin(Uk[0] * delta_s))
+        # g.append(((f_y_flk + f_y_frk) * ca.cos(Uk[0] * delta_s) + f_y_rlk + f_y_rrk
+        #           + (f_x_flk + f_x_frk) * ca.sin(Uk[0] * delta_s))
+        #          * veh["cog_z"] / ((veh["track_width_front"] + veh["track_width_rear"]) / 2) - Uk[3] * gamma_y_s)
+        g.append(((f_y_fk) * ca.cos(Uk[0] * delta_s) + f_y_rk
+                  + (f_x_fk) * ca.sin(Uk[0] * delta_s))
                  * veh["cog_z"] / ((veh["track_width_front"] + veh["track_width_rear"]) / 2) - Uk[3] * gamma_y_s)
         lbg.append([0.0])
         ubg.append([0.0])
@@ -792,8 +847,10 @@ def opt_mintime(reftrack: np.ndarray,
         # append outputs
         x_opt.append(Xk * x_s)
         u_opt.append(Uk * u_s)
-        tf_opt.extend([f_x_flk, f_y_flk, f_z_flk, f_x_frk, f_y_frk, f_z_frk])
-        tf_opt.extend([f_x_rlk, f_y_rlk, f_z_rlk, f_x_rrk, f_y_rrk, f_z_rrk])
+        # tf_opt.extend([f_x_flk, f_y_flk, f_z_flk, f_x_frk, f_y_frk, f_z_frk])
+        # tf_opt.extend([f_x_rlk, f_y_rlk, f_z_rlk, f_x_rrk, f_y_rrk, f_z_rrk])
+        tf_opt.extend([f_x_fk, f_y_fk, f_z_fk])
+        tf_opt.extend([f_x_rk, f_y_rk, f_z_rk])
         ax_opt.append(axk)
         ay_opt.append(ayk)
 
@@ -870,7 +927,7 @@ def opt_mintime(reftrack: np.ndarray,
     # solver options
     opts = {"expand": True,
             "verbose": print_debug,
-            "ipopt.max_iter": 2000,
+            "ipopt.max_iter": 20000,
             "ipopt.tol": 1e-7}
 
     # solver options for warm start
@@ -915,6 +972,8 @@ def opt_mintime(reftrack: np.ndarray,
 
     # end time measure
     tend = time.perf_counter()
+    print(solver.stats())
+    print(dir(solver))
 
     if solver.stats()['return_status'] != 'Solve_Succeeded':
         print('\033[91m' + 'ERROR: Optimization did not succeed!' + '\033[0m')
@@ -958,8 +1017,10 @@ def opt_mintime(reftrack: np.ndarray,
     u_opt = np.reshape(u_opt, (N, nu))
 
     # solution for tire forces
-    tf_opt = np.append(tf_opt[-12:], tf_opt[:])
-    tf_opt = np.reshape(tf_opt, (N + 1, 12))
+    # tf_opt = np.append(tf_opt[-12:], tf_opt[:])
+    # tf_opt = np.reshape(tf_opt, (N + 1, 12))
+    tf_opt = np.append(tf_opt[-6:], tf_opt[:])
+    tf_opt = np.reshape(tf_opt, (N + 1, 6))
 
     # solution for time
     t_opt = np.hstack((0.0, np.cumsum(dt_opt)))
