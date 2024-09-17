@@ -2,6 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def show_or_save(plt, name, plot_opts):
+    if "output_stem" in plot_opts:
+        plt.savefig(
+            plot_opts["output_stem"] + "_%s.png" % name
+        )
+        plt.close()
+    else:
+        plt.show()
+
+
+
 def result_plots_mintime(pars: dict,
                          reftrack: np.ndarray,
                          s: np.ndarray,
@@ -126,7 +137,7 @@ def result_plots_mintime(pars: dict,
                     r'$\it{a_y}$' + ' in ' + r'$\it{\frac{m}{s^2}}$',
                     r'$\it{a_{tot}}$' + ' in ' + r'$\it{\frac{m}{s^2}}$',
                     r'$\it{t}$' + ' in ' + r'$\it{s}$'])
-        plt.show()
+        show_or_save(plt, "v_a_t", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: SIDE SLIP ANGLE + YAW RATE + RELATIVE ANGLE TO TANGENT ON REFLINE + STEERING ANGLE -------------------------
@@ -156,7 +167,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('steering angle ' + r'$\delta$' + ' in ' + r'$\it{°}$')
         plt.grid()
-        plt.show()
+        show_or_save(plt, "general", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: LATERAL DISTANCE TO REFERENCE LINE + ROAD BOUNDARIES -------------------------------------------------------
@@ -176,7 +187,7 @@ def result_plots_mintime(pars: dict,
         plt.ylabel('lateral distance to reference line ' + r'$\it{n}$' + ' in ' + r'$\it{m}$')
         plt.legend(['raceline', 'road boundaries', 'road boundaries - safety margin'], ncol=1, loc=4)
         plt.grid()
-        plt.show()
+        show_or_save(plt, "lateral_distance", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: KAMM's CIRCLE ----------------------------------------------------------------------------------------------
@@ -242,7 +253,7 @@ def result_plots_mintime(pars: dict,
         plt.ylabel(r'$\it{\frac{F_{x}}{F_{xmax}}}$')
         plt.axis('equal')
         plt.grid()
-        plt.show()
+        show_or_save(plt, "kamm_circle", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: TIRE FORCES (LONGITUDINAL + LATERAL + NORMAL) --------------------------------------------------------------
@@ -288,7 +299,7 @@ def result_plots_mintime(pars: dict,
         plt.ylabel(r'$\it{F_{i}}$' + ' in ' + r'$\it{N}$')
         plt.legend([r'$\it{F_{x}}$', r'$\it{F_{y}}$', r'$\it{F_{z}}$'], ncol=3, loc=4)
         plt.grid()
-        plt.show()
+        show_or_save(plt, "tire_forces", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: TIRE FORCES (LONGITUDINAL) ---------------------------------------------------------------------------------
@@ -306,7 +317,7 @@ def result_plots_mintime(pars: dict,
                     r'$\it{F_{drive}}$' + " + " + r'$\it{F_{brake}}$',
                     r'$\it{F_{P_{max}}}$'], ncol=1, loc=4)
         plt.grid()
-        plt.show()
+        show_or_save(plt, "tire_forces_longitudinal", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: DYNAMIC WHEEL LOAD TRANSFER --------------------------------------------------------------------------------
@@ -371,7 +382,7 @@ def result_plots_mintime(pars: dict,
         plt.legend([r'$\it{F_{lift}}$', r'$\it{F_{dyn,long}}$', r'$\it{F_{dyn,lat}}$',
                     r'$\it{F_{lift}}$' + ' + ' + r'$\it{F_{dyn,long}}$' + ' + ' + r'$\it{F_{dyn,lat}}$'], ncol=2, loc=4)
         plt.grid()
-        plt.show()
+        show_or_save(plt, "tire_forces_dynamic", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: ENERGY CONSUMPTION -----------------------------------------------------------------------------------------
@@ -385,7 +396,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('energy consumption ' + r'$\it{ec}$' + ' in ' + r'$\it{Wh}$')
         plt.grid()
-        plt.show()
+        show_or_save(plt, "energy_consumption", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWER ------------------------------------------------------------------------------------------------------
@@ -402,7 +413,7 @@ def result_plots_mintime(pars: dict,
         if pwr is not None:
             plt.plot(s[:-1], pwr["batt"].p_loss_total + pwr["batt"].p_out_batt)
             plt.legend([r'$\it{P_{wheel}}$', r'$\it{P_{system}}$'])
-        plt.show()
+        show_or_save(plt, "power", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWERTRAIN TEMPERATURES ------------------------------------------------------------------------------------
@@ -422,7 +433,7 @@ def result_plots_mintime(pars: dict,
         plt.legend([r'$\it{T_\mathrm{Machine}}$', r'$\it{T_\mathrm{Battery}}$', r'$\it{T_\mathrm{Inverter}}$',
                     r'$\it{T_\mathrm{Fluid_{MI}}}$', r'$\it{T_\mathrm{Fluid_B}}$'])
         plt.grid()
-        plt.show()
+        show_or_save(plt, "powertrain_temperatures", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: SOC BATTERY ------------------------------------------------------------------------------------------------
@@ -435,7 +446,7 @@ def result_plots_mintime(pars: dict,
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.ylabel('SOC battery [1 - 0]')
         plt.grid()
-        plt.show()
+        show_or_save(plt, "soc_battery", plot_opts)
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOT: POWER LOSSES -----------------------------------------------------------------------------------------------
@@ -476,7 +487,7 @@ def result_plots_mintime(pars: dict,
 
         plt.xlabel('distance ' + r'$\it{s}$' + ' in ' + r'$\it{m}$')
         plt.grid()
-        plt.show()
+        show_or_save(plt, "power_losses", plot_opts)
 
 # testing --------------------------------------------------------------------------------------------------------------
     if __name__ == "__main__":

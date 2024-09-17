@@ -4,6 +4,16 @@ from mpl_toolkits.mplot3d import Axes3D
 import trajectory_planning_helpers
 
 
+def show_or_save(plt, name, plot_opts):
+    if "output_stem" in plot_opts:
+        plt.savefig(
+            plot_opts["output_stem"] + "_%s.png" % name
+        )
+        plt.close()
+    else:
+        plt.show()
+
+
 def result_plots(plot_opts: dict,
                  width_veh_opt: float,
                  width_veh_real: float,
@@ -69,7 +79,7 @@ def result_plots(plot_opts: dict,
         ax.set_aspect("equal", "datalim")
         plt.xlabel("east in m")
         plt.ylabel("north in m")
-        plt.show()
+        show_or_save(plt, "raceline_plot", plot_opts)
 
     if plot_opts["raceline_curv"]:
         # plot curvature profile
@@ -78,7 +88,7 @@ def result_plots(plot_opts: dict,
         plt.grid()
         plt.xlabel("distance in m")
         plt.ylabel("curvature in rad/m")
-        plt.show()
+        show_or_save(plt, "raceline_curv", plot_opts)
 
     if plot_opts["racetraj_vel_3d"]:
         scale_x = 1.0
@@ -134,7 +144,7 @@ def result_plots(plot_opts: dict,
             # increment index
             cur_ind += ind_stepsize
 
-        plt.show()
+        show_or_save(plt, "racetraj_vel_3d", plot_opts)
 
     if plot_opts["spline_normals"]:
         plt.figure()
@@ -150,7 +160,7 @@ def result_plots(plot_opts: dict,
         plt.xlabel("east in m")
         plt.ylabel("north in m")
 
-        plt.show()
+        show_or_save(plt, "spline_normals", plot_opts)
 
 
 # testing --------------------------------------------------------------------------------------------------------------
